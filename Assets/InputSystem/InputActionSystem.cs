@@ -206,6 +206,15 @@ public partial class @InputActionSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""dd9441d4-9665-4ba8-a2d1-61617a96361d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -318,6 +327,28 @@ public partial class @InputActionSystem: IInputActionCollection2, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b806091d-7349-4c3f-8311-a8f5f4c346de"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf98a6ca-b29f-41f5-bba7-3d8542acb906"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -398,6 +429,7 @@ public partial class @InputActionSystem: IInputActionCollection2, IDisposable
         // PlayerMovementVector
         m_PlayerMovementVector = asset.FindActionMap("PlayerMovementVector", throwIfNotFound: true);
         m_PlayerMovementVector_Movement = m_PlayerMovementVector.FindAction("Movement", throwIfNotFound: true);
+        m_PlayerMovementVector_Jump = m_PlayerMovementVector.FindAction("Jump", throwIfNotFound: true);
         // PlayerShoot
         m_PlayerShoot = asset.FindActionMap("PlayerShoot", throwIfNotFound: true);
         m_PlayerShoot_Shoot = m_PlayerShoot.FindAction("Shoot", throwIfNotFound: true);
@@ -579,11 +611,13 @@ public partial class @InputActionSystem: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PlayerMovementVector;
     private List<IPlayerMovementVectorActions> m_PlayerMovementVectorActionsCallbackInterfaces = new List<IPlayerMovementVectorActions>();
     private readonly InputAction m_PlayerMovementVector_Movement;
+    private readonly InputAction m_PlayerMovementVector_Jump;
     public struct PlayerMovementVectorActions
     {
         private @InputActionSystem m_Wrapper;
         public PlayerMovementVectorActions(@InputActionSystem wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_PlayerMovementVector_Movement;
+        public InputAction @Jump => m_Wrapper.m_PlayerMovementVector_Jump;
         public InputActionMap Get() { return m_Wrapper.m_PlayerMovementVector; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -596,6 +630,9 @@ public partial class @InputActionSystem: IInputActionCollection2, IDisposable
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
         }
 
         private void UnregisterCallbacks(IPlayerMovementVectorActions instance)
@@ -603,6 +640,9 @@ public partial class @InputActionSystem: IInputActionCollection2, IDisposable
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
             @Movement.canceled -= instance.OnMovement;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
         }
 
         public void RemoveCallbacks(IPlayerMovementVectorActions instance)
@@ -707,6 +747,7 @@ public partial class @InputActionSystem: IInputActionCollection2, IDisposable
     public interface IPlayerMovementVectorActions
     {
         void OnMovement(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
     public interface IPlayerShootActions
     {

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _verticalRotationSensibility = 1.5f;
     [SerializeField] private float _horizontalRotationSensibility = 3;
     private Camera _mainCamera;
-    private InputActionSystem inputActions;
+    private InputActionSystem _inputActions;
     private Rigidbody _rigidBody;
     private Vector3 _direction;
     private Vector2 _rotation;
@@ -23,20 +24,31 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private bool _grounded = false;
     [SerializeField] private float gravity = -20f;
+    [SerializeField] private float jumpForce = 10f;
 
     private void Awake()
     {
-        inputActions = new InputActionSystem();
+        _inputActions = new InputActionSystem();
 
-        inputActions.PlayerRotation.MouseAxis.performed += MouseAxisPerformed;
-        inputActions.PlayerRotation.MouseAxis.canceled += MouseAxisPerformed;
+        _inputActions.PlayerRotation.MouseAxis.performed += MouseAxisPerformed;
+        _inputActions.PlayerRotation.MouseAxis.canceled += MouseAxisPerformed;
 
-        inputActions.PlayerMovementVector.Movement.performed += VectorMovementPerformed;
+        _inputActions.PlayerMovementVector.Movement.performed += VectorMovementPerformed;
+
+        _inputActions.PlayerMovementVector.Jump.performed += PerformJump;
         // inputActions.PlayerMovementVector.Movement.canceled += VectorMovementCanceled;
 
-        inputActions.Enable();
+        _inputActions.Enable();
+
 
         _rigidBody = GetComponent<Rigidbody>();
+    }
+
+    private void PerformJump(InputAction.CallbackContext context)
+    {
+        
+        _rigidBody.AddForce((Vector3.up + transform.forward) * jumpForce, ForceMode.Impulse);
+        
     }
 
     void Start()
@@ -83,6 +95,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         MovementUpdate();
+
         GravityScale();
     }
 
