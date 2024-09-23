@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _clampRange = 45f;
 
     [SerializeField] private bool _grounded = false;
+    [SerializeField] private float gravity = -20f;
 
     private void Awake()
     {
@@ -42,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
     {
         _mainCamera = Camera.main;
         _rotation = _mainCamera.transform.rotation.eulerAngles;
+
     }
 
     private void MouseAxisPerformed(InputAction.CallbackContext context)
@@ -81,6 +83,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         MovementUpdate();
+        GravityScale();
     }
 
     private void LateUpdate()
@@ -113,6 +116,11 @@ public class PlayerMovement : MonoBehaviour
     {
         _mainCamera.transform.position = 
             new Vector3(transform.position.x, transform.position.y + 2f, transform.position.z);
+    }
+
+    private void GravityScale()
+    {
+         _rigidBody.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
     }
 
     private RaycastHit[] RaycastNonAlloc(int maxCollisions = 10)
@@ -149,6 +157,9 @@ public class PlayerMovement : MonoBehaviour
 
     void OnDrawGizmos()
     {
+        // Gizmos.color = new Color(0, 0, 1, 0.5f);
+        // Gizmos.DrawSphere(transform.position, 3);
+
         // Gizmos.color = Color.red;
         // Gizmos.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 1000);
 

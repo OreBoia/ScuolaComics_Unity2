@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
@@ -17,7 +18,7 @@ public class MovingPlatform : MonoBehaviour
 
     void Update()
     {
-        if (Vector2.Distance(waypoints[currentWaypointIndex].position, transform.position) < 0.1f)
+        if (math.distance(waypoints[currentWaypointIndex].position, transform.position) < 0.1f)
         {
             currentWaypointIndex++;
             if (currentWaypointIndex >= waypoints.Length)
@@ -26,6 +27,6 @@ public class MovingPlatform : MonoBehaviour
             }
         }
 
-        transform.position = Vector2.MoveTowards(transform.position, waypoints[currentWaypointIndex].position, Time.deltaTime * speed);
+        _rigidbody.velocity = (waypoints[currentWaypointIndex].position - transform.position).normalized * speed;
     }
 }
