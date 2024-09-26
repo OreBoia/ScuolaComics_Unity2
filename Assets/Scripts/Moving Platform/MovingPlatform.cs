@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
-
     private Rigidbody _rigidbody;
     public Transform[] waypoints;
     public float speed = 5f;
