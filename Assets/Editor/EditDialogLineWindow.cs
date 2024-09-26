@@ -6,7 +6,7 @@ public class EditDialogLineWindow : EditorWindow
     public int stringIndex;
     public string stringContent;
     public string characterName;
-    public Texture2D characterSprite;
+    public Sprite characterSprite;
     public DialogSO dialog;
     public bool confirm;
 
@@ -23,8 +23,30 @@ public class EditDialogLineWindow : EditorWindow
         // The changed value is stored back in the characterName field
         characterName = EditorGUILayout.TextField(characterName);
 
+        // Start a horizontal layout to place the character sprite and its label side by side
+        GUILayout.BeginHorizontal();
+
+        // If there is a character sprite set
         if(characterSprite != null)
-            GUILayout.Box(characterSprite, GUILayout.Width(200), GUILayout.Height(200));
+        {
+            // Get the sprite's texture
+            Sprite mySprite = characterSprite;
+            Rect textureRect = mySprite.textureRect;
+
+            // Create a box that displays the texture
+            // The box will have the same width and height as the texture
+            GUILayout.Box(mySprite.texture, GUILayout.Width(textureRect.width), GUILayout.Height(textureRect.height));
+        }
+
+        // Create a label to show the character sprite
+        // This label will be placed to the right of the box containing the sprite
+        GUILayout.Label("Character Sprite");
+        // Create a input field to insert a sprite
+        // The current value of the character sprite is passed as an argument
+        // The changed value is stored back in the characterSprite field
+        characterSprite = (Sprite)EditorGUILayout.ObjectField(characterSprite, typeof(Sprite), false);
+
+        GUILayout.EndHorizontal();
 
         // Create a label to show the content
         GUILayout.Label("Content");
@@ -74,5 +96,6 @@ public class EditDialogLineWindow : EditorWindow
         confirm = true;
         dialog.sentences[stringIndex].UpdateLine(stringContent);
         dialog.sentences[stringIndex].UpdateCharacterName(characterName);
+        dialog.sentences[stringIndex].UpdateCharacterSprite(characterSprite);
     }
 }

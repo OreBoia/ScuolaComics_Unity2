@@ -33,6 +33,11 @@ public class Sentence
     {
         this.characterName = newCharacterName;
     }
+
+    public void UpdateCharacterSprite(Sprite newCharacterSprite)
+    {
+        this.characterSprite = newCharacterSprite;
+    }
 }
 
 

@@ -121,7 +121,7 @@ public class DialogEditor : EditorWindow
                 editDialogLineWindow.stringContent = dialog.sentences[i].line;
                 editDialogLineWindow.characterName = dialog.sentences[i].characterName;
                 editDialogLineWindow.dialog = dialog;
-                editDialogLineWindow.characterSprite = dialog.sentences[i].characterSprite.texture;
+                editDialogLineWindow.characterSprite = dialog.sentences[i].characterSprite;
             }
 
             if(GUILayout.Button("+", EditorStyles.miniButtonMid, GUILayout.Width(25f))) 
