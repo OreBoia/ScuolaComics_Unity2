@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87853541cac92f94ab8224325e66d785, type: 3}
   m_Name: NewDialog
   m_EditorClassIdentifier: 
-  sentences: []
+  sentences:
+  - characterName: CIAO
+    characterSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+    line: 'CIAO
+
+'
