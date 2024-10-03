@@ -24,6 +24,6 @@ public class MovingPlatform : MonoBehaviour
             }
         }
 
-        _rigidbody.velocity = (waypoints[currentWaypointIndex].position - transform.position).normalized * speed;
+        _rigidbody.velocity = math.normalizesafe(waypoints[currentWaypointIndex].position - transform.position) * speed;
     }
 }

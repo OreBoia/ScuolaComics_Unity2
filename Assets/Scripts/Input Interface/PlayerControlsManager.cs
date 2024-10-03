@@ -8,6 +8,12 @@ public class PlayerControlsManager : MonoBehaviour, InputActionSystem.IPlayerMov
 {
     private InputActionSystem _inputActions;
 
+    public static UnityAction onJump;
+    public static UnityAction HandleJump;
+    public static UnityAction<string> HandleJumpString;
+
+    public UnityEvent<string> unityEvent;
+
     public static UnityAction<InputAction.CallbackContext> handleJump;
     
     void Awake()
@@ -21,6 +27,18 @@ public class PlayerControlsManager : MonoBehaviour, InputActionSystem.IPlayerMov
         _inputActions.PlayerMovementVector.Enable();
     }
 
+    void OnEnable()
+    {
+        HandleJump += FaiQualcosaOnJump;
+
+        // HandleJumpString += FaiQualcosaOnJump;
+    }
+
+    void OnDisable()
+    {
+        HandleJump -= FaiQualcosaOnJump;
+    }
+
     public void OnJump(InputAction.CallbackContext context)
     {
         // if(context.phase == InputActionPhase.Performed
@@ -30,10 +48,22 @@ public class PlayerControlsManager : MonoBehaviour, InputActionSystem.IPlayerMov
         // }
 
         handleJump?.Invoke(context);
+
+        HandleJumpString?.Invoke("Ciao");
     }
 
     public void OnMovement(InputAction.CallbackContext context)
     {
         throw new System.NotImplementedException();
+    }
+
+    private void FaiQualcosaOnJump()
+    {
+        Debug.Log("Jump");    
+    }
+
+    public void FaiQualcosaOnJump(string stringa, string stringa2)
+    {
+        Debug.Log(stringa);    
     }
 }
