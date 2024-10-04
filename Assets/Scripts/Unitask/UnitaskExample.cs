@@ -33,17 +33,17 @@ public class UnitaskExample : MonoBehaviour
 
         await UniTask.WaitUntil(() => token.IsCancellationRequested);
 
-        // while(true)
-        // {
-        //     if(token.IsCancellationRequested)
-        //     {
-        //         break;
-        //     }
+        while(true)
+        {
+            if(token.IsCancellationRequested)
+            {
+                break;
+            }
 
-        //     Debug.Log("Cancellazione in corso");
+            Debug.Log("Cancellazione in corso");
 
-        //     await UniTask.WaitForFixedUpdate();
-        // }
+            await UniTask.WaitForFixedUpdate();
+        }
 
         // try
         // {

@@ -134,9 +134,14 @@ GameObject:
   - component: {fileID: 169213100}
   - component: {fileID: 169213099}
   - component: {fileID: 169213098}
-  - component: {fileID: 169213102}
   - component: {fileID: 169213103}
+  - component: {fileID: 169213108}
+  - component: {fileID: 169213102}
+  - component: {fileID: 169213107}
+  - component: {fileID: 169213106}
+  - component: {fileID: 169213105}
   - component: {fileID: 169213104}
+  - component: {fileID: 169213109}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -245,15 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee6a7bf2fb2bd204ca7a2dc9c63702c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _force: 500
-  _rotationSensibility: 3
-  _verticalRotationSensibility: 100
-  _horizontalRotationSensibility: 100
-  _maxCollisionDetection: 10
-  _clampRange: 45
-  _grounded: 1
-  gravity: 0
-  jumpForce: 100
+  _speed: 500
 --- !u!54 &169213103
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -278,7 +275,7 @@ Rigidbody:
   m_ImplicitTensor: 0
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 1
 --- !u!114 &169213104
@@ -290,24 +287,79 @@ MonoBehaviour:
   m_GameObject: {fileID: 169213097}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1081e7c0ef987842ab2243211a14a4e, type: 3}
+  m_Script: {fileID: 11500000, guid: c483a6b1296cea8489eb632f2debfa40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unityEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 169213104}
-        m_TargetAssemblyTypeName: PlayerControlsManager, Assembly-CSharp
-        m_MethodName: FaiQualcosaOnJump
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+--- !u!114 &169213105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169213097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1598cf6acbf7ee4685f39cbd8bca51b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  maxDistance: 1.01
+  isGrounded: 0
+--- !u!114 &169213106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169213097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4111e6e47e79fae458fe787f4273e83a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _jumpForce: 500
+--- !u!114 &169213107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169213097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4beb860a1bbea3f4598bb8630d2d138c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _verticalRotationSensibility: 5
+  _horizontalRotationSensibility: 8
+  _clampRange: 40
+--- !u!114 &169213108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169213097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de8c79813003eab4bb4743c46f0a0674, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &169213109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169213097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bc9acb3512ab8046a38b7312d72dd0d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gravity: 200
 --- !u!1 &480350031
 GameObject:
   m_ObjectHideFlags: 0
@@ -498,7 +550,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 64
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -537,7 +589,7 @@ GameObject:
   - component: {fileID: 1169783180}
   - component: {fileID: 1169783179}
   - component: {fileID: 1169783178}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -849,7 +901,7 @@ GameObject:
   - component: {fileID: 2114102884}
   - component: {fileID: 2114102889}
   - component: {fileID: 2114102888}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
