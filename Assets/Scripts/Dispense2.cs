@@ -7,7 +7,21 @@ using System;
 
 public class Dispense2 : MonoBehaviour 
 {
-    
+    void Start()
+    {
+        UniTask.Create(async () => await TestCreate());
+    }
+
+    public async  UniTask TestCreate()
+    {
+        await UniTask.SwitchToThreadPool();
+        Debug.Log("Inizio TestCreate SwitchToThreadPool");
+        
+        await UniTask.Delay(1000);
+
+        await UniTask.SwitchToMainThread();
+        Debug.Log("Fine TestCreate SwitchToMainThread");
+    }
 }
 
 
