@@ -28,6 +28,7 @@ public class CountdownController : MonoBehaviour
     private async UniTask CountdownAsync(CancellationToken token)
     {
         // Implementa il conto alla rovescia asincrono
+        await UniTask.Delay(5000, cancellationToken: token);
     }
 
     private void CancelCountdown()
