@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class DialogEditor : EditorWindow
 {
@@ -29,7 +28,7 @@ public class DialogEditor : EditorWindow
     private void OnGUI()
     {
         //Titolo della finestra
-        titleContent = new GUIContent("Dialog Editor");
+        titleContent = new GUIContent("Dialog Editor Lezioni");
 
         // CREATE NEW DIALOG
         if (GUILayout.Button("New Dialog"))
@@ -83,7 +82,17 @@ public class DialogEditor : EditorWindow
             EditorGUILayout.BeginScrollView(scrollPosition);
 
         // DISPLAY DIALOG
+        EditorGUILayout.BeginHorizontal();
+
         GUILayout.Label("DIALOG LIST");
+
+        if(GUILayout.Button("+", EditorStyles.miniButtonMid, GUILayout.Width(25f))) 
+        {  
+            AddString(ref dialog);
+        }
+
+        EditorGUILayout.EndHorizontal();
+
         GUILayout.Space(5f);
 
         // DISPLAY STRINGS
@@ -105,7 +114,7 @@ public class DialogEditor : EditorWindow
             /// If the character name is empty, it shows the string "null" instead.
             /// </remarks>
             EditorGUILayout.LabelField(dialog.sentences[i].characterName, 
-                imageName != null ? imageName : "null");
+                imageName != null ? imageName : "Error Name");
 
             // STRING CONTENT
             GUILayout.Space(15f);
@@ -126,7 +135,7 @@ public class DialogEditor : EditorWindow
 
             if(GUILayout.Button("+", EditorStyles.miniButtonMid, GUILayout.Width(25f))) 
             {  
-                AddString(i, ref dialog);
+                AddString(ref dialog);
             }
 
             // REMOVE STRING
@@ -137,7 +146,7 @@ public class DialogEditor : EditorWindow
                     "YES",
                     "NO"))
                 {
-                    RemoveString(dialog.sentences[i].line);
+                    RemoveString(dialog.sentences[i], ref dialog);
                     break;
                 }
 
@@ -154,13 +163,13 @@ public class DialogEditor : EditorWindow
     /// </summary>
     /// <param name="index">The index at which to add the new string</param>
     /// <param name="dialog">The Dialog to modify</param>
-    private void AddString(int index, ref DialogSO dialog)
+    private void AddString(ref DialogSO dialog)
     {
         // Create a new Sentence with empty values
         Sentence newSentence = new Sentence("", null, "");
 
         // Insert the new Sentence at the specified index
-        dialog.sentences.Insert(index + 1, newSentence);
+        dialog.sentences.Add(newSentence);
     }
 
     /// <summary>
@@ -221,20 +230,9 @@ public class DialogEditor : EditorWindow
     /// in the Dialog Editor window.
     /// </summary>
     /// <param name="line">The string to remove.</param>
-    private void RemoveString(string line)
+    private void RemoveString(Sentence line, ref DialogSO dialog)
     {
-        // Iterate over all the languages in the project
-        foreach (string languagePath in dialogsAssetsFound)
-        {
-            // Load the language asset
-            DialogSO language = AssetDatabase.LoadAssetAtPath<DialogSO>(languagePath);
-
-            // Remove all the sentences that match the given line
-            language.sentences.RemoveAll(s => s.line == line);
-
-            // Mark the language asset as dirty to save the changes
-            EditorUtility.SetDirty(language);
-        }
+        dialog.sentences.Remove(line);
     }
 }
 
