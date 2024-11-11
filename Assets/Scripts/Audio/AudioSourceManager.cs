@@ -18,8 +18,8 @@ public class AudioSourceManager : MonoBehaviour
         audioSource.Play();
 
         // normalmente l'audio source può riprodurre solo una clip per volta 
-        //PlayOneShot permette di poter riprodurre un clip una volta
-        //utile per fare effetti
+        // PlayOneShot permette di poter riprodurre un clip una volta
+        // utile per fare effetti
         audioSource.PlayOneShot(audioClip);
 
         // Mettere in pausa l'audio
@@ -41,5 +41,11 @@ public class AudioSourceManager : MonoBehaviour
         }
     }
 
+    [SerializeField] private AudioMixer mixer;
+    public void TransitionToSnapshot(string snapshotName, float transitionTime)
+    {
+        AudioMixerSnapshot snapshot = mixer.FindSnapshot(snapshotName);
+        snapshot.TransitionTo(transitionTime);
+    }
 }
 

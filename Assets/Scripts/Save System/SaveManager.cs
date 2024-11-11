@@ -12,8 +12,9 @@ namespace SaveLoad.Runtime
         {
             if (!File.Exists(saveFolder + "/" + profileName))
             {
-                throw new FileNotFoundException("Profile not found: " + profileName);
+                Debug.LogError("Profile not found: " + profileName);
             }
+
             Debug.Log("Deleting profile: " + profileName);
             File.Delete(saveFolder + "/" + profileName);
         }
