@@ -1,51 +1,133 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
 
 public class AudioSourceManager : MonoBehaviour
 {
-    [SerializeField] private AudioClip audioClip;
+    // [SerializeField] private AudioClip audioClip;
 
-    private void Awake()
-    {        
-        // Ottenere il componente AudioSource
-        AudioSource audioSource = GetComponent<AudioSource>();
+    [SerializeField] private List<AudioSourceObjectDictionary> _audioSourcePrefabs = new List<AudioSourceObjectDictionary>();
+    [SerializeField] private List<AudioSourceObjectDictionary> _audioSourceObjectsInstantiated = new List<AudioSourceObjectDictionary>();    // [SerializeField] private AudioSource[] audioSource;
 
-        // Riprodurre l'audio
-        // devi assegnare la clip all'AudioSource
-        // utile per le colonne sonoree o audio lunghi
-        audioSource.clip = audioClip;
-        audioSource.Play();
+    [SerializeField] private ClipsCollector _clipsCollector;
 
-        // normalmente l'audio source può riprodurre solo una clip per volta 
-        // PlayOneShot permette di poter riprodurre un clip una volta
-        // utile per fare effetti
-        audioSource.PlayOneShot(audioClip);
+    private static AudioSourceManager _instance;
+    [SerializeField] private AudioMixer mixer;
 
-        // Mettere in pausa l'audio
-        audioSource.Pause();
+    public float TransitionTime;
 
-        // Interrompere l'audio
-        audioSource.Stop();
+    public static AudioSourceManager Instance => _instance;
 
-        // Modificare il volume
-        audioSource.volume = 0.5f;
+    void Awake()
+    {
+        _instance = this;
 
-        // Cambiare il pitch
-        audioSource.pitch = 1.2f;
+        _audioSourcePrefabs.ForEach((x) => 
+            {
+                _audioSourceObjectsInstantiated.Add(
+                        new AudioSourceObjectDictionary() 
+                        {
+                            name = x.name, 
+                            audioSourcePrefab = Instantiate(x.audioSourcePrefab)
+                        });
+            });
+    }
 
-        // Controllare se l'audio sta riproducendo
-        if (audioSource.isPlaying)
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Q))
         {
-            // Fare qualcosa
+            SetBackgroundAudioSource();
+        }
+
+        if(Input.GetKeyDown(KeyCode.T))
+        {
+            // Debug.Log("Transition");
+            TransitionToSnapshot("Mute", TransitionTime);
+        }
+
+        if(Input.GetKeyDown(KeyCode.W))
+        {
+            ReproduceSFXAudioSource("SFX");
         }
     }
 
-    [SerializeField] private AudioMixer mixer;
+    private void SetBackgroundAudioSource()
+    {
+        if(_audioSourceObjectsInstantiated[0].audioSourcePrefab.TryGetComponent<AudioSource>(out AudioSource source))
+        {
+            if(source.isPlaying)
+            {
+                source.Stop();
+            }
+            else
+            {
+                source.clip = _clipsCollector.Clips[0].audioClip;
+                source.Play();
+            }
+        }
+    }
+
+    public void ReproduceSFXAudioSource(string clipName)
+    {
+        if(_audioSourceObjectsInstantiated[1].audioSourcePrefab.TryGetComponent<AudioSource>(out AudioSource source))
+        {
+            if(!source.isPlaying)
+                source.PlayOneShot(_clipsCollector.Clips.Where(x => x.groupName == clipName).First().audioClip);
+        }
+    }
+
+    private void AudioSourceExamples()
+    {        
+    //     // Riprodurre l'audio
+    //     // devi assegnare la clip all'AudioSource
+    //     // utile per le colonne sonore o audio lunghi
+    //     audioSource[0].clip = audioClip;
+    //     audioSource[0].Play();
+
+    //     // normalmente l'audio source può riprodurre solo una clip per volta 
+    //     // PlayOneShot permette di poter riprodurre un clip una volta
+    //     // utile per fare effetti
+    //     audioSource[0].PlayOneShot(audioClip);
+
+    //     // Mettere in pausa l'audio
+    //     audioSource[0].Pause();
+
+    //     // Interrompere l'audio
+    //     audioSource[0].Stop();
+
+    //     // Modificare il volume
+    //     audioSource[0].volume = 0.5f;
+
+    //     // Cambiare il pitch
+    //     audioSource[0].pitch = 1.2f;
+
+    //     // Controllare se l'audio sta riproducendo
+    //     if (audioSource[0].isPlaying)
+    //     {
+    //         // Fare qualcosa
+    //     }
+    // }
+    }
+
+    
     public void TransitionToSnapshot(string snapshotName, float transitionTime)
     {
-        AudioMixerSnapshot snapshot = mixer.FindSnapshot(snapshotName);
-        snapshot.TransitionTo(transitionTime);
+        AudioMixerSnapshot snapshotEnd = mixer.FindSnapshot(snapshotName);
+        // AudioMixerSnapshot snapshotStart = mixer.FindSnapshot("Snapshot");
+        // Debug.Log("Transitioning to snapshot: " + snapshotEnd);
+        // mixer.TransitionToSnapshots(new AudioMixerSnapshot[] { snapshotStart, snapshotEnd }, new float[] { 1f, 1f}, transitionTime);ù
+        snapshotEnd.TransitionTo(transitionTime);
     }
+}
+
+[Serializable]
+public struct AudioSourceObjectDictionary
+{
+    public string name;
+    public GameObject audioSourcePrefab;
+
 }
 

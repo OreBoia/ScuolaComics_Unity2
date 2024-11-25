@@ -51,5 +51,8 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "ScuolaComics_Unity2.sln"
+    "dotnet.defaultSolution": "ScuolaComics_Unity2.sln",
+    "cSpell.words": [
+        "decryptor"
+    ]
 }
